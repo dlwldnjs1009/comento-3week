@@ -5,6 +5,7 @@
 ![image](https://github.com/dlwldnjs1009/comento-3week/assets/107186291/03ae28a0-20fe-4210-9626-834f4504f016)
 
 ###3) 평균 하루 로그인 수
+
 ![image](https://github.com/dlwldnjs1009/comento-3week/assets/107186291/4de3a0c1-a246-485b-ab31-f7de59735d50)
 
 ###4) 휴일을 제외한 로그인 수
