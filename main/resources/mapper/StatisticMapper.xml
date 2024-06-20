@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.demo.comentostatistic2.dao.StatisticMapper">
+
+    <select id="selectYearLogin" parameterType="string" resultType="YearCountDto">
+        select concat('20', #{year}) as year, count(*) as totCnt
+        from statistic2.requestInfo ri
+        where left(ri.createDate, 2) = #{year};
+    </select>
+
+
+    <select id="selectYearMonthLogin" parameterType="string" resultType="YearMonthCountDto">
+        select concat('20', #{yearMonth}) as yearMonth, count(*) as totCnt
+        from statistic2.requestInfo ri
+        where left(ri.createDate, 4) = #{yearMonth};
+    </select>
+
+
+    <select id="selectMonthlyLogins" resultType="com.demo.comentostatistic2.dto.LoginCountDto">
+        SELECT DATE_FORMAT(createDate, '%Y-%m') AS period, COUNT(*) AS count
+        FROM statistic2.requestInfo
+        GROUP BY period
+    </select>
+
+    <select id="selectDailyLogins" resultType="com.demo.comentostatistic2.dto.LoginCountDto">
+        SELECT createDate AS period, COUNT(*) AS count
+        FROM statistic2.requestInfo
+        GROUP BY createDate
+    </select>
+
+    <select id="selectHolidaysByYearMonth" parameterType="map" resultType="com.demo.comentostatistic2.dto.HolidayInfoDto">
+        SELECT locdate, dateKind, dateName, isHoliday, seq
+        FROM statistic2.holiday_info
+        WHERE LEFT(locdate, 6) = #{yearMonth}
+    </select>
+
+    <select id="getLoginsByYearMonth" parameterType="map" resultType="string">
+        SELECT createDate
+        FROM statistic2.requestInfo
+        WHERE LEFT(createDate, 6) = #{yearMonth}
+    </select>
+
+    <select id="selectAverageDailyLogins" resultType="int">
+        SELECT COALESCE(AVG(daily_count), 0) AS average_login
+        FROM (
+                 SELECT COUNT(*) AS daily_count
+                 FROM statistic2.requestInfo
+                 GROUP BY createDate
+             ) AS daily_counts
+    </select>
+
+    <select id="selectMonthlyLoginsByDepartment" parameterType="string" resultType="com.demo.comentostatistic2.dto.DepartmentLoginCountDto">
+        SELECT
+            CONCAT(SUBSTRING(ri.createDate, 1, 4), '-', SUBSTRING(ri.createDate, 5, 2)) AS period,
+            COUNT(*) AS count,
+            u.HR_ORGAN AS departmentName
+        FROM
+            statistic2.requestInfo ri
+            JOIN
+            statistic2.user u ON ri.userID = u.userID
+        WHERE
+            u.HR_ORGAN = #{department}
+        GROUP BY
+            DATE_FORMAT(ri.createDate, '%Y-%m'), u.HR_ORGAN
+    </select>
+</mapper>
