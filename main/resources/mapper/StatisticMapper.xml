@@ -33,13 +33,13 @@
 
     <select id="selectHolidaysByYearMonth" parameterType="map" resultType="com.demo.comentostatistic2.dto.HolidayInfoDto">
         SELECT locdate, dateKind, dateName, isHoliday, seq
-        FROM statistic2.holiday_info
+        FROM holiday_info
         WHERE LEFT(locdate, 6) = #{yearMonth}
     </select>
 
     <select id="getLoginsByYearMonth" parameterType="map" resultType="string">
         SELECT createDate
-        FROM statistic2.requestInfo
+        FROM requestInfo
         WHERE LEFT(createDate, 6) = #{yearMonth}
     </select>
 

@@ -48,11 +48,13 @@ public class StatisticService {
         Map<String, Object> params = new HashMap<>();
         params.put("yearMonth", yearMonth);
 
+        // 공휴일 정보 조회
         List<HolidayInfoDto> holidays = statisticMapper.selectHolidaysByYearMonth(params);
         Set<String> holidayDates = holidays.stream()
                 .map(h -> String.valueOf(h.getLocdate()))
                 .collect(Collectors.toSet());
 
+        // 해당 년월의 모든 로그인 날짜 조회
         List<String> logins = statisticMapper.getLoginsByYearMonth(params);
         int loginCount = 0;
 
